@@ -39,7 +39,7 @@ class MainWindow(wx.Frame):
         self.SetSizer(self.sizer)
         self.SetAutoLayout(1)
         self.sizer.Fit(self)
-        self.Show(True)
+        #self.Show(True)
         
     def OnAbout(self, event):
         dlg = wx.MessageDialog(self, u"密讯保证你的通讯安全", u"关于密讯", wx.OK)
@@ -60,7 +60,24 @@ class MainWindow(wx.Frame):
             self.control.SetValue(f.read())
             f.close()
         dlg.Destroy()
+        
+class App(wx.App):
+    def __init__(self, redirect=True, filename=None):
+        print "App __init__"
+        wx.App.__init__(self, redirect, filename)
+        
+    def OnInit(self):
+        print "App __OnInit__"
+        self.frame = MainWindow(None, u"密讯")
+        self.frame.Show()
+        self.SetTopWindow(self.frame)
+        return True
+    
+    def OnExit(self):
+        print "APP __OnExit__"
 
-app = wx.App(False)
-frame = MainWindow(None,u"密讯")
-app.MainLoop()
+if __name__ == '__main__':
+    app = App(redirect=True)
+    print "before MainLoop"
+    app.MainLoop()
+    print "after MainLoop"
